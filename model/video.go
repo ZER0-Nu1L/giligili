@@ -36,7 +36,7 @@ func (video *Video) VideoURL() string {
 
 // View 点击数
 func (video *Video) View() uint64 {
-	countStr, _ := cache.RedisClient.Get(cache.VideoViewKey(video.ID)).Result()
+	countStr, _ := cache.RedisClient.Get(cache.Ctx, cache.VideoViewKey(video.ID)).Result()
 	count, _ := strconv.ParseUint(countStr, 10, 64)
 	return count
 }
@@ -44,7 +44,7 @@ func (video *Video) View() uint64 {
 // AddView 视频游览
 func (video *Video) AddView() {
 	// 增加视频点击数
-	cache.RedisClient.Incr(cache.VideoViewKey(video.ID))
+	cache.RedisClient.Incr(cache.Ctx, cache.VideoViewKey(video.ID))
 	// 增加排行点击数
-	cache.RedisClient.ZIncrBy(cache.DailyRankKey, 1, strconv.Itoa(int(video.ID)))
+	cache.RedisClient.ZIncrBy(cache.Ctx, cache.DailyRankKey, 1, strconv.Itoa(int(video.ID)))
 }

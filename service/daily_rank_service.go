@@ -17,7 +17,7 @@ func (service *DailyRankService) Get() serializer.Response {
 	var videos []model.Video
 
 	// 从redis读取点击前十的视频
-	vids, _ := cache.RedisClient.ZRevRange(cache.DailyRankKey, 0, 9).Result()
+	vids, _ := cache.RedisClient.ZRevRange(cache.Ctx, cache.DailyRankKey, 0, 9).Result()
 
 	if len(vids) > 1 {
 		order := fmt.Sprintf("FIELD(id, %s)", strings.Join(vids, ","))
